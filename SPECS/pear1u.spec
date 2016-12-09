@@ -1,3 +1,5 @@
+# IUS spec file for pear1u, forked from
+#
 # Fedora spec file for php-pear
 #
 # License: MIT
@@ -25,9 +27,9 @@
 %{!?pecl_xmldir: %global pecl_xmldir %{_sharedstatedir}/php/peclxml}
 
 Summary: PHP Extension and Application Repository framework
-Name: php-pear
+Name: pear1u
 Version: 1.10.1
-Release: 7%{?dist}
+Release: 1.ius%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
 # Structures_Graph is LGPLv3+
@@ -35,8 +37,7 @@ License: BSD and LGPLv3+
 Group: Development/Languages
 URL: http://pear.php.net/package/PEAR
 Source0: http://download.pear.php.net/package/PEAR-%{version}%{?pearprever}.tgz
-# wget https://raw.githubusercontent.com/pear/pear-core/stable/install-pear.php
-Source1: install-pear.php
+Source1: https://raw.githubusercontent.com/pear/pear-core/v%{version}/install-pear.php
 Source3: cleanup.php
 Source10: pear.sh
 Source11: pecl.sh
@@ -95,13 +96,19 @@ Requires:  php-bz2
 # Structures_Graph: none
 # XML_Util: pcre
 # optional: overload and xdebug
-# for /var/www/html ownership
-Requires: httpd-filesystem
+
+Provides:  php-pear = %{version}-%{release}
+Conflicts: php-pear < %{version}-%{release}
+Provides:  pear = %{version}-%{release}
+Conflicts: pear < %{version}-%{release}
+Provides:  pecl = %{version}-%{release}
+Conflicts: pecl < %{version}-%{release}
 
 
 %description
 PEAR is a framework and distribution system for reusable PHP
 components.  This package contains the basic PEAR components.
+
 
 %prep
 %setup -cT
@@ -293,6 +300,9 @@ fi
 
 
 %changelog
+* Fri Dec 09 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-1.ius
+- Port from Fedora (php-pear) to IUS (pear1u)
+
 * Fri Sep 30 2016 Remi Collet <remi@fedoraproject.org> 1:1.10.1-7
 - fix https connection via a proxy
   patch from https://github.com/pear/pear-core/pull/51
