@@ -24,8 +24,6 @@
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
-%{!?pecl_xmldir: %global pecl_xmldir %{_sharedstatedir}/php/peclxml}
-
 Summary: PHP Extension and Application Repository framework
 Name: pear1u
 Version: 1.10.1
@@ -57,8 +55,6 @@ BuildRequires: php(language) > 5.4
 BuildRequires: php-cli
 BuildRequires: php-xml
 BuildRequires: gnupg
-# For pecl_xmldir macro
-BuildRequires: php-devel
 %if %{with_tests}
 BuildRequires:  %{_bindir}/phpunit
 %endif
@@ -155,6 +151,8 @@ install -d $RPM_BUILD_ROOT%{peardir} \
            $RPM_BUILD_ROOT%{_localstatedir}/cache/php-pear \
            $RPM_BUILD_ROOT%{_localstatedir}/www/html \
            $RPM_BUILD_ROOT%{_localstatedir}/lib/pear/pkgxml \
+           $RPM_BUILD_ROOT%{_docdir}/pecl \
+           $RPM_BUILD_ROOT%{_datadir}/tests/pecl \
            $RPM_BUILD_ROOT%{_sysconfdir}/pear
 
 export INSTALL_ROOT=$RPM_BUILD_ROOT
@@ -243,27 +241,6 @@ exit $ret
 echo 'Test suite disabled (missing "--with tests" option)'
 %endif
 
-# Register newly installed PECL packages
-%transfiletriggerin -- %{pecl_xmldir}
-while read file; do
-  %{_bindir}/pecl install --nodeps --soft --force --register-only --nobuild "$file" >/dev/null || :
-done
-
-# Unregister to be removed PECL packages
-# Reading the xml file to retrieve channel and package name
-%transfiletriggerun -- %{pecl_xmldir}
-%{_bindir}/php -r '
-while ($file=fgets(STDIN)) {
-  $file = trim($file);
-  $xml = simplexml_load_file($file);
-  if (isset($xml->channel) &&  isset($xml->name)) {
-    printf("%s/%s\n", $xml->channel, $xml->name);
-  } else {
-    fputs(STDERR, "Bad pecl package file ($file)\n");
-  }
-}' | while read  name; do
-  %{_bindir}/pecl uninstall --nodeps --ignore-errors --register-only "$name" >/dev/null || :
-done
 
 
 %postun
@@ -291,6 +268,9 @@ fi
 %doc README*
 %dir %{_docdir}/pear
 %doc %{_docdir}/pear/*
+%dir %{_docdir}/pecl
+%dir %{_datadir}/tests
+%dir %{_datadir}/tests/pecl
 %{_datadir}/tests/pear
 %{_datadir}/pear-data
 %{_mandir}/man1/pear.1*
@@ -302,6 +282,7 @@ fi
 %changelog
 * Fri Dec 09 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-1.ius
 - Port from Fedora (php-pear) to IUS (pear1u)
+- Revert 'drop runtime dependency on PEAR' (file triggers) changes
 
 * Fri Sep 30 2016 Remi Collet <remi@fedoraproject.org> 1:1.10.1-7
 - fix https connection via a proxy
