@@ -22,8 +22,6 @@
 # Can't be run in mock / koji because PEAR is the first package
 %global with_tests 0%{?_with_tests:1}
 
-%global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
-
 Summary: PHP Extension and Application Repository framework
 Name: pear1u
 Version: 1.10.1
@@ -187,7 +185,7 @@ install -m 755 %{SOURCE12} $RPM_BUILD_ROOT%{_bindir}/peardev
 
 
 install -m 644 -D macros.pear \
-           $RPM_BUILD_ROOT%{macrosdir}/macros.pear
+           $RPM_BUILD_ROOT%{rpmmacrodir}/macros.pear
 
 # apply patches on installed PEAR tree
 pushd $RPM_BUILD_ROOT%{peardir} 
@@ -261,7 +259,7 @@ fi
 %{metadir}/pkgxml
 %{_bindir}/*
 %config(noreplace) %{_sysconfdir}/pear.conf
-%{macrosdir}/macros.pear
+%{rpmmacrodir}/macros.pear
 %dir %{_localstatedir}/cache/php-pear
 %dir %{_sysconfdir}/pear
 %license LICENSE*
@@ -283,6 +281,7 @@ fi
 * Fri Dec 09 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-1.ius
 - Port from Fedora (php-pear) to IUS (pear1u)
 - Revert 'drop runtime dependency on PEAR' (file triggers) changes
+- Use correct macros directory via %%rpmmacrodir (from epel-rpm-macros)
 
 * Fri Sep 30 2016 Remi Collet <remi@fedoraproject.org> 1:1.10.1-7
 - fix https connection via a proxy
