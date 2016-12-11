@@ -70,6 +70,11 @@ Provides: php-composer(pear/pear-core-minimal) = %{version}
 Provides: php-composer(pear/structures_graph) = %{structver}
 Provides: php-composer(pear/xml_util) = %{xmlutil}
 
+Provides:  pear = %{version}
+Conflicts: pear < %{version}
+Provides:  pecl = %{version}
+Conflicts: pecl < %{version}
+
 # Archive_Tar requires 5.2
 # XML_Util, Structures_Graph require 5.3
 # Console_Getopt requires 5.4
@@ -93,10 +98,6 @@ Requires:  php-bz2
 
 Provides:  php-pear = %{epoch}:%{version}-%{release}
 Conflicts: php-pear < %{epoch}:%{version}-%{release}
-Provides:  pear = %{version}-%{release}
-Conflicts: pear < %{version}-%{release}
-Provides:  pecl = %{version}-%{release}
-Conflicts: pecl < %{version}-%{release}
 
 
 %description
@@ -280,6 +281,7 @@ fi
 %changelog
 * Sat Dec 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
 - Add %%epoch to provides/conflicts to properly provide/conflict with the stock name
+- Remove %%release from provides of "pear" and "pecl"
 
 * Fri Dec 09 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-1.ius
 - Port from Fedora (php-pear) to IUS (pear1u)
