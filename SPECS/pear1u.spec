@@ -25,7 +25,7 @@
 Summary: PHP Extension and Application Repository framework
 Name: pear1u
 Version: 1.10.1
-Release: 1.ius%{?dist}
+Release: 2.ius%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
 # Structures_Graph is LGPLv3+
@@ -91,8 +91,8 @@ Requires:  php-bz2
 # XML_Util: pcre
 # optional: overload and xdebug
 
-Provides:  php-pear = %{version}-%{release}
-Conflicts: php-pear < %{version}-%{release}
+Provides:  php-pear = %{epoch}:%{version}-%{release}
+Conflicts: php-pear < %{epoch}:%{version}-%{release}
 Provides:  pear = %{version}-%{release}
 Conflicts: pear < %{version}-%{release}
 Provides:  pecl = %{version}-%{release}
@@ -278,6 +278,9 @@ fi
 
 
 %changelog
+* Sat Dec 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
+- Add %%epoch to provides/conflicts to properly provide/conflict with the stock name
+
 * Fri Dec 09 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-1.ius
 - Port from Fedora (php-pear) to IUS (pear1u)
 - Revert 'drop runtime dependency on PEAR' (file triggers) changes
