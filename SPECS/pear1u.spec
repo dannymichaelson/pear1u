@@ -15,7 +15,7 @@
 # https://pear.php.net/bugs/bug.php?id=19367
 # Structures_Graph 1.0.4 - incorrect FSF address
 %global structver 1.1.1
-%global xmlutil   1.3.0
+%global xmlutil   1.4.2
 %global manpages  1.10.0
 
 # Tests are only run with rpmbuild --with tests
@@ -277,6 +277,7 @@ fi
 %changelog
 * Tue Feb 28 2017 Carl George <carl.george@rackspace.com> - 1:1.10.3-1.ius
 - Latest upstream
+- Update XML_Util to 1.4.2 (Fedora)
 
 * Sat Dec 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
 - Add %%epoch to provides/conflicts to properly provide/conflict with the stock name
