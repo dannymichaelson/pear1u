@@ -24,8 +24,8 @@
 
 Summary: PHP Extension and Application Repository framework
 Name: pear1u
-Version: 1.10.1
-Release: 2.ius%{?dist}
+Version: 1.10.3
+Release: 1.ius%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
 # Structures_Graph is LGPLv3+
@@ -44,9 +44,6 @@ Source22: http://pear.php.net/get/Console_Getopt-%{getoptver}.tgz
 Source23: http://pear.php.net/get/Structures_Graph-%{structver}.tgz
 Source24: http://pear.php.net/get/XML_Util-%{xmlutil}.tgz
 Source25: http://pear.php.net/get/PEAR_Manpages-%{manpages}.tgz
-
-# https://github.com/pear/pear-core/pull/51
-Patch0:   pear-proxy.patch
 
 BuildArch: noarch
 BuildRequires: php(language) > 5.4
@@ -123,7 +120,7 @@ done
 cp %{SOURCE1} .
 
 # apply patches on used PEAR during install
-# Patch0 applied on installation tree
+# Patches applied on installation tree
 
 sed -e 's:@BINDIR@:%{_bindir}:' \
     -e 's:@LIBDIR@:%{_localstatedir}/lib:' \
@@ -189,9 +186,9 @@ install -m 644 -D macros.pear \
            $RPM_BUILD_ROOT%{rpmmacrodir}/macros.pear
 
 # apply patches on installed PEAR tree
-pushd $RPM_BUILD_ROOT%{peardir} 
-patch --no-backup --fuzz 0 -p1 < %{PATCH0}
-popd
+#pushd $RPM_BUILD_ROOT%{peardir} 
+#patch --no-backup --fuzz 0 -p1 < %{PATCH0}
+#popd
 
 # Why this file here ?
 rm -rf $RPM_BUILD_ROOT/.depdb* $RPM_BUILD_ROOT/.lock $RPM_BUILD_ROOT/.channels $RPM_BUILD_ROOT/.filemap
@@ -241,7 +238,6 @@ echo 'Test suite disabled (missing "--with tests" option)'
 %endif
 
 
-
 %postun
 if [ $1 -eq 0 -a -d %{metadir}/.registry ] ; then
   rm -rf %{metadir}/.registry
@@ -279,6 +275,9 @@ fi
 
 
 %changelog
+* Tue Feb 28 2017 Carl George <carl.george@rackspace.com> - 1:1.10.3-1.ius
+- Latest upstream
+
 * Sat Dec 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
 - Add %%epoch to provides/conflicts to properly provide/conflict with the stock name
 - Remove %%release from provides of "pear" and "pecl"
