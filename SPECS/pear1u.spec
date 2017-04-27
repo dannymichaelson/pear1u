@@ -24,7 +24,7 @@
 
 Summary: PHP Extension and Application Repository framework
 Name: pear1u
-Version: 1.10.3
+Version: 1.10.4
 Release: 1.ius%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
@@ -119,8 +119,8 @@ do
 done
 cp %{SOURCE1} .
 
-# apply patches on used PEAR during install
-# Patches applied on installation tree
+# apply patches on PEAR needed during install
+# other patches applied on installation tree
 
 sed -e 's:@BINDIR@:%{_bindir}:' \
     -e 's:@LIBDIR@:%{_localstatedir}/lib:' \
@@ -275,6 +275,9 @@ fi
 
 
 %changelog
+* Thu Apr 27 2017 Carl George <carl.george@rackspace.com> - 1:1.10.4-1.ius
+- Latest upstream
+
 * Tue Feb 28 2017 Carl George <carl.george@rackspace.com> - 1:1.10.3-1.ius
 - Latest upstream
 - Update XML_Util to 1.4.2 (Fedora)
